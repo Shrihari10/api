@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>API</title>
+</head>
+<body>
+    <form >
+        <input type="text" id="search" oninput="myFunction()">
+        <button type="button">submit</button>
+    </form>
+        
+    
+    <script>
+        function myFunction(){
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = () =>{};
+        httpRequest.open('POST', '/search', true);
+        httpRequest.setRequestHeader("Content-Type", "/search");
+        console.log(document.getElementById("search").value);
+        httpRequest.send(JSON.stringify({"value": document.getElementById("search").value}));
+        
+        for(let i=0;i<httpRequest.responseText.length;i++){
+        document.createElement("li").innerText=httpRequest.responseText[i];
+        }
+        }
+    </script>
+
+</body>
+</html>
