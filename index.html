@@ -8,23 +8,38 @@
 </head>
 <body>
     <form >
-        <input type="text" id="search" oninput="myFunction()">
+        <label for="search"> Enter the Name to Search</label>
+        
+        <input type="text" id="search" oninput="searchFunction()" placeholder="Name">
+        <datalist id="list">
+        </datalist>
         <button type="button">submit</button>
     </form>
         
     
     <script>
-        function myFunction(){
+        function searchFunction(){
+
+        let input = {
+            value: document.getElementById("search").value
+        };
         var httpRequest = new XMLHttpRequest();
-        httpRequest.onreadystatechange = () =>{};
+        // httpRequest.onreadystatechange = () =>{};
         httpRequest.open('POST', '/search', true);
-        httpRequest.setRequestHeader("Content-Type", "/search");
-        console.log(document.getElementById("search").value);
-        httpRequest.send(JSON.stringify({"value": document.getElementById("search").value}));
-        
-        for(let i=0;i<httpRequest.responseText.length;i++){
-        document.createElement("li").innerText=httpRequest.responseText[i];
-        }
+        httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+        // console.log(document.getElementById("search").value);
+        httpRequest.send(JSON.stringify(input));
+        httpRequest.onreadystatechange = processRequest;
+            function processRequest(e) {
+                if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                    for(let i=0;i<JSON.parse(httpRequest.responseText).length;i++){
+                        var list = document.createElement("OPTION");
+                        list.setAttribute("value",JSON.parse(httpRequest.responseText)[i]);
+                        document.getElementById("list").appendChild(list);
+                    } 
+                }
+            }
+       
         }
     </script>
 

@@ -6,8 +6,9 @@ const path = require('path')
 const db = require('./mongokey').MongoURI;
 const Student = require("./model");
 
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+
 
 app.use(express.static(path.join(__dirname,"")));
 
@@ -91,13 +92,18 @@ app.get('/rollnumber/:id', (req,res) => {
 })
 
 let users = [];
+
 app.post('/search', (req,res)=>{
     Student.find().then( students => {
         for(let i=0;i<students.length;i++){
-            if(students[i].name.includes(req.body))
+            if(req.body.value !== "" || req.body.value !==" "){
+            if(students[i].name.includes(req.body.value))
             users[i] = students[i].name;
+            }
         }
-        res.send(users);
+        // console.log(users);
+        res.json(users);
+        users =[];
     })
 });
 
